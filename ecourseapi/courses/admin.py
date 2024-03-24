@@ -3,6 +3,7 @@ from courses.models import Category, Course
 from django.utils.html import mark_safe
 from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
+import cloudinary
 
 
 class CourseForm(forms.ModelForm):
@@ -22,6 +23,8 @@ class CourseAdmin(admin.ModelAdmin):
 
     def my_image(self, course):
         if course.image: # nếu có ảnh thì trả về, còn không thì để null
+            if type(course.image) is cloudinary.CloudinaryResource:
+                return mark_safe(f"<img width='390' src='{course.image.url}'/>")
             return mark_safe(f"<img width='390' src='/static/{course.image.name}'/>")
 
     class Media:

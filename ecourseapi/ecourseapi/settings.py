@@ -46,6 +46,15 @@ INSTALLED_APPS = [
 
 CKEDITOR_UPLOAD_PATH = "ckeditors/images/"
 
+import cloudinary
+
+cloudinary.config(
+    cloud_name="dps7wzdje",
+    api_key="617746798111338",
+    api_secret="fd9RqNR0zX5GfzbJd-Rcp1tA8Yo"
+)
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
