@@ -49,7 +49,7 @@ class Lesson(BaseModel):
     courses = models.ForeignKey(Course, on_delete=models.CASCADE) # cascade : khi xóa khóa học, tất cả bài học đều bị xóa theo
     content = RichTextField()
     image = CloudinaryField()
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
 
     class Meta:
         # trong cùng khóa học, không có hai bài học trùng tên
