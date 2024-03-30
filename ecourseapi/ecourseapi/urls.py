@@ -32,6 +32,22 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Course API",
+        default_version='v1',
+        description="APIs for CourseApp",
+        contact=openapi.Contact(email="hothanhthuy11.2003@gmail.com"),
+        license=openapi.License(name="Hồ Thanh Thúy@2024"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 urlpatterns = [
     path('', include('courses.urls')),
     path('admin/', admin.site.urls),

@@ -1,5 +1,9 @@
 from django.contrib import admin
+<<<<<<< HEAD
 from courses.models import Category, Course, Lesson, Comment, Like, Tag
+=======
+from courses.models import Category, Course, Lesson, Tag, Comment, Like
+>>>>>>> origin
 from django.utils.html import mark_safe
 from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
@@ -38,5 +42,10 @@ admin.site.register(Category)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson)
 admin.site.register(Comment)
+<<<<<<< HEAD
 admin.site.register(Like)
 admin.site.register(Tag)
+=======
+admin.site.register(Tag)
+admin.site.register(Like)
+>>>>>>> origin
