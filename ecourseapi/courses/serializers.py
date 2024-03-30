@@ -50,6 +50,7 @@ class UserSerializer(ModelSerializer):
         data = validated_data.copy() # sao chép dữ liệu
         u = User(**data) # lấy key làm tên tham số, lấy value được giá trị truyền vào
         u.set_password(u.password) # hàm băm của django
+        # lưu User lại
         u.save()
 
         return u
@@ -72,9 +73,9 @@ class UserSerializer(ModelSerializer):
             }
         }
 
+
 class CommentSerializer(ModelSerializer):
     user = UserSerializer() # gọi để dưới class meta => xuất được hết thông tin của user
-
     class Meta:
         model = Comment
         fields = ['id', 'content', 'created_date', 'updated_date', 'user']
