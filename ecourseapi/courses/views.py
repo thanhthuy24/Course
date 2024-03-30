@@ -1,7 +1,6 @@
 from rest_framework import viewsets, generics, status, parsers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-<<<<<<< HEAD
 from courses.models import Category, Course, Lesson, Like, Comment, Tag, User
 from courses import serializers, paginators
 
@@ -47,7 +46,6 @@ class CourseViewSet(viewsets.ViewSet, generics.ListAPIView):
             lessons = lessons.filter(subject__icontains=q)
 
         # trả về cái dữ liệu mà nó serializer cho mình
-=======
 from courses.models import Category, Course, Lesson, User
 from courses import serializers, paginators
 
@@ -79,14 +77,12 @@ class CourseViewSet(viewsets.ModelViewSet, generics.ListAPIView):
     @action(methods=['get'], url_path='lesson', detail=True) # detail=true thì mới có biến pk
     def get_lesson(self, request, pk):
         lessons = self.get_object().lesson_set.filter(active=True)
->>>>>>> origin
         return Response(serializers.LessonSerializer(lessons, many=True).data,
                         status=status.HTTP_200_OK)
 
 
 class LessonViewSet(viewsets.ModelViewSet, generics.RetrieveAPIView):
     queryset = Lesson.objects.prefetch_related('tags').filter(active=True)
-<<<<<<< HEAD
     serializer_class = serializers.LessonDetailSerializer
 
     @action(methods=['get'], url_path='comments', detail=True)
@@ -97,18 +93,12 @@ class LessonViewSet(viewsets.ModelViewSet, generics.RetrieveAPIView):
         # nếu có 100 cmt => mất 100 lần join để lấy từng user ra.
 
         return Response(serializers.CommentSerializer(comments, many=True).data, status=status.HTTP_200_OK)
-=======
     serializer_class = serializers.LessonDetailsSerializer
->>>>>>> origin
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
     queryset = User.objects.filter(is_active=True)
     serializer_class = serializers.UserSerializer
-<<<<<<< HEAD
 
     # vì mặc định không nhận file => dùng parsers
     parser_classes = [parsers.MultiPartParser,]
-=======
-    parser_classes = [parsers.MultiPartParser, ]
->>>>>>> origin

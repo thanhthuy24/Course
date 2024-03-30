@@ -1,9 +1,6 @@
 from rest_framework.serializers import ModelSerializer
-<<<<<<< HEAD
 from courses.models import Category, Course, Lesson, Comment, Tag, User
-=======
 from courses.models import Category, Course, Tag, Lesson, User
->>>>>>> origin
 
 
 class CategorySerializer(ModelSerializer):
@@ -13,17 +10,14 @@ class CategorySerializer(ModelSerializer):
 
 
 class ItemSerializer(ModelSerializer):
-<<<<<<< HEAD
     # phương thức trả ra kết quả đọc ra ngoài
     def to_representation(self, instance):
         req = super().to_representation(instance)
         req['image'] = instance.image.url
 
-=======
     def to_representation(self, instance):
         req = super().to_representation(instance)
         req['image'] = instance.image.url
->>>>>>> origin
         return req
 
 
@@ -44,13 +38,8 @@ class LessonSerializer(ItemSerializer):
         model = Lesson
         fields = ['id', 'subject', 'image', 'created_date']
 
-
-<<<<<<< HEAD
 # xem chi tiết bài học
-class LessonDetailSerializer(LessonSerializer):
-=======
 class LessonDetailsSerializer(LessonSerializer):
->>>>>>> origin
     tags = TagSerializer(many=True)
 
     class Meta:
@@ -59,7 +48,6 @@ class LessonDetailsSerializer(LessonSerializer):
 
 
 class UserSerializer(ModelSerializer):
-<<<<<<< HEAD
     # đè lại serializer để không lộ mật khẩu
     def create(self, validated_data):
         data = validated_data.copy() # sao chép dữ liệu
@@ -76,7 +64,6 @@ class UserSerializer(ModelSerializer):
             rep['avatar'] = instance.avatar.url
 
         return rep
-=======
     def create(self, validated_data):
         data = validated_data.copy()
         user = User(**data)
@@ -84,21 +71,16 @@ class UserSerializer(ModelSerializer):
         user.save()
 
         return user
->>>>>>> origin
 
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email', 'username', 'password', 'avatar']
-<<<<<<< HEAD
 
         # không cho xem password
-=======
->>>>>>> origin
         extra_kwargs = {
             'password': {
                 'write_only': True
             }
-<<<<<<< HEAD
         }
 
 
@@ -107,6 +89,4 @@ class CommentSerializer(ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'content', 'created_date', 'updated_date', 'user']
-=======
-        }
->>>>>>> origin
+
