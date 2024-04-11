@@ -1,23 +1,19 @@
-from rest_framework.serializers import ModelSerializer
 from courses.models import Category, Course, Lesson, Comment, Tag, User
-from courses.models import Category, Course, Tag, Lesson, User
+from rest_framework import serializers
 
 
-class CategorySerializer(ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
 
 
-class ItemSerializer(ModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
     # phương thức trả ra kết quả đọc ra ngoài
     def to_representation(self, instance):
         req = super().to_representation(instance)
         req['image'] = instance.image.url
 
-    def to_representation(self, instance):
-        req = super().to_representation(instance)
-        req['image'] = instance.image.url
         return req
 
 
@@ -27,7 +23,7 @@ class CourseSerializer(ItemSerializer):
         fields = ['id', 'name', 'image', 'created_date']
 
 
-class TagSerializer(ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name']
@@ -47,7 +43,24 @@ class LessonDetailsSerializer(LessonSerializer):
         fields = LessonSerializer.Meta.fields + ['content', 'tags']
 
 
-class UserSerializer(ModelSerializer):
+class AuthenticatedLessonDetailsSerializer(LessonDetailsSerializer):
+    #
+    liked = serializers.SerializerMethodField()
+
+    def get_liked(self, lesson): # lesson là instance của model
+        request = self.context.get('request')
+        if request:
+            # muốn biết user đã like bài này chưa,
+            # lấy danh sách các like (truy vấn ngược - like_set)
+            # trường exists - kiểm tra tồn tại
+            return lesson.like_set.filter(user=request.user, active=True).exists()
+
+    class Meta:
+        model = LessonDetailsSerializer.Meta.model
+        fields = LessonDetailsSerializer.Meta.fields + ['liked']
+
+
+class UserSerializer(serializers.ModelSerializer):
     # đè lại serializer để không lộ mật khẩu
     def create(self, validated_data):
         data = validated_data.copy() # sao chép dữ liệu
@@ -64,6 +77,7 @@ class UserSerializer(ModelSerializer):
             rep['avatar'] = instance.avatar.url
 
         return rep
+
     def create(self, validated_data):
         data = validated_data.copy()
         user = User(**data)
@@ -84,7 +98,7 @@ class UserSerializer(ModelSerializer):
         }
 
 
-class CommentSerializer(ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer() # gọi để dưới class meta => xuất được hết thông tin của user
     class Meta:
         model = Comment

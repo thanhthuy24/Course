@@ -43,12 +43,15 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'rest_framework',
-    'drf_yasg'
-<<<<<<< HEAD
-=======
-
->>>>>>> origin
+    'drf_yasg',
+    'oauth2_provider',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
 
 CKEDITOR_UPLOAD_PATH = "ckeditors/images/"
 
@@ -59,7 +62,6 @@ cloudinary.config(
     api_key="617746798111338",
     api_secret="fd9RqNR0zX5GfzbJd-Rcp1tA8Yo"
 )
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -99,7 +101,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'coursedb',
         'USER': 'root',
-        'PASSWORD': 'Admin@123',
+        'PASSWORD': 'Admin123@',
         'HOST': ''  # mặc định localhost
     }
 }
@@ -142,3 +144,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLIENT_ID = 'fKvjjkgv8nQGeJtGZeha8TakluznWN0iPJwfvDCs'
+
+CLIENT_SECRET = 'sFkks2xKCVNb0xcyzzUMsxRKKEw1gTlSJs3IXH1T0MY5VVrjpwSZh6jMmFb2kbQLASQJSkA55qrBhOCCu2ap9jiXSlyEk9h3mtKOfXyQWey9gvn2jlOT41LMjW3YzVbl'
+
