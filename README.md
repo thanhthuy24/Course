@@ -6,6 +6,6 @@ The steps run the project:
 5. Executing the migrations: python manage.py migrate
 6. Creating an superuser (python manage.py createsuperuser) and accessing admin page to test
 How to deal with Network error?
-1. APIs.js: const BASE_URL = 'http:/*.*.*.*:8000/'; use ip of wi-fi
+1. APIs.js: const BASE_URL = 'http:/+.+.+.+:8000/'; use ip of wi-fi
 2. Server: python manage.py runserver 0.0.0.0:8000 => run this
-3. file setting.py, retify ALLOWED_HOSTS = ['*.*.*.*'] => done!
+3. file setting.py, retify ALLOWED_HOSTS = ['+.+.+.+'] => done!
