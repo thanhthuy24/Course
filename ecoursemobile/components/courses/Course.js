@@ -1,15 +1,18 @@
-import { View, Text, ActivityIndicator, Image, ScrollView } from "react-native";
+import { View, Text, ActivityIndicator, Image, ScrollView, TouchableOpacity } from "react-native";
 import MyStyle from "../../style/MyStyle";
 import { useEffect, useState } from "react";
 import APIs, { endpoints } from "../../configs/APIs";
 import { Chip, List, Searchbar } from "react-native-paper";
+import Item from "../utils/Item";
+import { isCloseToBottom } from "../utils/Utils";
 
-const Course = () => {
+const Course = ({navigation}) => {
     const [categories, setCategories] = useState(null);
     const [courses, setCourse] = useState([]);
     const [loading, setLoading] = useState(false);
     const [q, setQ] = useState("");
     const [cateId, setCateId] = useState("");
+    const [page, setPage] = useState(1)
 
     const loadCates = async () => {
         try {
@@ -21,16 +24,28 @@ const Course = () => {
     }   
 
     const loadCourses = async () => {
-        setLoading(true);
-        let url = `${endpoints['courses']}?q=${q}&&category_id=${cateId}`;
-        try {
-            let res = await APIs.get(url);
-            setCourse(res.data.results);
-        } catch (ex) {
-            console.error(ex);
-        } finally {
-            setLoading(false);
+        if (page > 0){
+            setLoading(true);
+            let url = `${endpoints['courses']}?q=${q}&&category_id=${cateId}&&page=${page}`;
+            try {
+                let res = await APIs.get(url);
+                if (page === 1)
+                    setCourse(res.data.results);
+                else
+                setCourse(current => {
+                    return [...current, ...res.data.results] //chen them du lieu vao trang hien tai
+                });
+    
+                if (!res.data.next)
+                    setPage(0);
+    
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                setLoading(false);
+            }
         }
+        
     }
 
     useEffect(() => {
@@ -39,14 +54,25 @@ const Course = () => {
 
     useEffect(() => {
         loadCourses();
-    }, [q, cateId]);
+    }, [q, cateId, page]);
+
+    const loadMore = ({nativeEvent}) => {
+    if (!loading && page > 0 && isCloseToBottom(nativeEvent)){
+        setPage(page + 1);
+    }
+    }
+
+    const search = (value, callback) => {
+        setPage(1);
+        callback(value);
+    }
 
     return (
         <View style={MyStyle.container}>
             <View style={[MyStyle.row, MyStyle.wrap]}>
-            <Chip mode={cateId?"outlined":"flat"} onPress={() => setCateId("")} style={MyStyle.margin} icon="tag">Tất cả</Chip>
+                <Chip mode={!cateId?"outlined":"flat"} onPress={() => search("", setCateId)} style={MyStyle.margin} icon="shape-plus">Tất cả</Chip>
                 {categories===null?<ActivityIndicator/>:<>
-                    {categories.map(c => <Chip mode={cateId===c.id?"flat":"outlined"} style={MyStyle.margin} key={c.id} icon="tag" onPress={() => setCateId(c.id)}>{c.name}</Chip>)}
+                    {categories.map(c => <Chip mode={c.id===cateId?"outlined":"flat"} key={c.id} onPress={() => search(c.id, setCateId)} style={MyStyle.margin} icon="shape-plus">{c.name}</Chip>)}
                 </>}
             </View>
 
@@ -54,11 +80,11 @@ const Course = () => {
                 <Searchbar placeholder="Search course..." value={q} onChangeText={setQ} />
             </View>
 
-            <ScrollView style={MyStyle.margin}>
+            <ScrollView style={MyStyle.margin} onScroll={loadMore}>
                 {loading && <ActivityIndicator/>}
-                {courses.map(c => <List.Item key={c.id} title={c.name} description= {c.created_date} 
-                    left={() => <Image style={MyStyle.avatar} source= {{uri: c.image}} />} />)
-                    }
+                {courses.map(c => <TouchableOpacity key={c.id} onPress={() => navigation.navigate('Lesson', {'courseId': c.id})}>
+                    <Item instance={c} />
+                </TouchableOpacity>)}
             </ScrollView>
         </View>
     );
