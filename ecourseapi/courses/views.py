@@ -74,7 +74,7 @@ class CourseViewSet(viewsets.ModelViewSet, generics.ListAPIView):
 
         return queryset
 
-    @action(methods=['get'], url_path='lesson', detail=True) # detail=true thì mới có biến pk
+    @action(methods=['get'], url_path='lessons', detail=True) # detail=true thì mới có biến pk
     def get_lesson(self, request, pk):
         lessons = self.get_object().lesson_set.filter(active=True)
         return Response(serializers.LessonSerializer(lessons, many=True).data,
@@ -113,7 +113,7 @@ class LessonViewSet(viewsets.ModelViewSet, generics.RetrieveAPIView):
         return Response(serializers.CommentSerializer(comments, many=True).data, status=status.HTTP_200_OK)
     #serializer_class = serializers.LessonDetailsSerializer
 
-    @action(methods=['post'], url_path='comments', detail=True)
+    @action(methods=['post'], url_path='comment', detail=True)
     def add_comment(self, request, pk):
         # tập hợp các comment của lesson
         c = self.get_object().comment_set.create(user=request.user, content=request.data.get('content')) # trả về đối tượng lesson đại diện cho khóa chính pk mà mình gửi lên

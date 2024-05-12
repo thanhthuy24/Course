@@ -56,10 +56,14 @@ class CourseAdmin(admin.ModelAdmin):
         }
 
 
+class LessonAdmin(admin.ModelAdmin):
+    list_display = ['id', 'subject', 'courses']
+
+
 # Register your models here.
 admin_site.register(Category, CateAdmin)
 admin_site.register(Course, CourseAdmin)
-admin_site.register(Lesson)
+admin_site.register(Lesson, LessonAdmin)
 admin_site.register(Comment)
 admin_site.register(Like)
 admin_site.register(Tag)
